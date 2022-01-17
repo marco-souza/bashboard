@@ -1,0 +1,15 @@
+#+TITLE: Readme
+
+* Tasks
+** TODO USBAT see a chart with wallet progress
+- [ ] fetch wallet info
+  + [ ] fetch data
+  + [ ] sign request
+- [ ] create Docker
+  + [ ] Add PostgreSQL
+  + [ ] Run fetching code
+  + [ ] Save into a postgresql
+- [ ] Schedule fetch
+- [ ] Show a wallet overview chart
+  + [ ] FE loading from API (maybe graphql)
+  + [ ] BE create endpoints for getting data
