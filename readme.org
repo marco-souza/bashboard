@@ -2,14 +2,16 @@
 
 * Tasks
 ** TODO USBAT see a chart with wallet progress
-- [ ] fetch wallet info
-  + [ ] fetch data
+- [-] fetch wallet info [1/3]
+  + [X] fetch system info
+  + [ ] fetch wallet data
+    - api doc: https://binance-docs.github.io/apidocs/spot/en/#all-coins-39-information-user_data
   + [ ] sign request
-- [ ] create Docker
+- [ ] create Docker [0/3]
   + [ ] Add PostgreSQL
   + [ ] Run fetching code
   + [ ] Save into a postgresql
 - [ ] Schedule fetch
-- [ ] Show a wallet overview chart
+- [ ] Show a wallet overview chartA [0/2]
   + [ ] FE loading from API (maybe graphql)
   + [ ] BE create endpoints for getting data
