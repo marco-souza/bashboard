@@ -5,21 +5,19 @@ import (
 	"marco-souza/binance-dashboard/cmd"
 	"os"
 	"os/exec"
-	"time"
 )
 
 func main() {
+
 	systemStatus := cmd.FetchSystemStatus()
-	refreshes := 0
+	fmt.Printf("System Status: %d => %s\n", systemStatus.Status, systemStatus.Msg)
 
-	for {
-		clear()
+	accountSnap := cmd.FetchAccountSnapshot()
+	fmt.Printf("Account Snapshot: %d => %s\n", accountSnap.Code, accountSnap.Msg)
+	fmt.Println(len(accountSnap.SnapshotVos))
 
-		refreshes++
-		fmt.Println("refreshed", refreshes, "times")
-		fmt.Printf("System Status: %d => %s\n", systemStatus.Status, systemStatus.Msg)
-
-		time.Sleep(time.Second)
+	for _, asset := range accountSnap.SnapshotVos {
+		fmt.Println(asset)
 	}
 }
 
