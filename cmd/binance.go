@@ -55,10 +55,15 @@ type AccountAssets struct {
 	Locked string `json:"locked"`
 }
 
+type AccountData struct {
+	TotalBtcAsset string          `json:"totalAssetOfBtc"`
+	Balances      []AccountAssets `json:"balances"`
+}
+
 type AccountSnapshot struct {
-	Type       string        `json:"type"`
-	UpdateTime int           `json:"updateTime"`
-	Data       AccountAssets `json:"data"` // TODO: improve type description
+	Type       string      `json:"type"`
+	UpdateTime time.Time   `JSON:"updateTime"`
+	Data       AccountData `json:"data"`
 }
 
 type AccountSnapshotResponse struct {
