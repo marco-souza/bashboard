@@ -15,7 +15,7 @@ func StartDesktopApp() {
 	// setup window
 	w.SetTitle("Bashboard")
 	w.SetSize(800, 600, webview.HintNone)
-	w.Navigate("https://podcodar.com")
+	w.Navigate("http://localhost:" + PORT)
 
 	w.Run()
 }
