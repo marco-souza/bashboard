@@ -8,7 +8,6 @@ import (
 )
 
 func main() {
-
 	systemStatus := cmd.FetchSystemStatus()
 	fmt.Printf("System Status: %d => %s\n", systemStatus.Status, systemStatus.Msg)
 
@@ -19,6 +18,8 @@ func main() {
 	for _, asset := range accountSnap.SnapshotVos {
 		fmt.Println(asset)
 	}
+
+	cmd.StartDesktopApp() // sync / blocking
 }
 
 func clear() {
