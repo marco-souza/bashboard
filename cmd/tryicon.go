@@ -7,24 +7,27 @@ import (
 	"github.com/getlantern/systray/example/icon"
 )
 
-func StartApp(done *chan bool) {
+func StartApp() {
 	onExit := func() {
 		fmt.Println("Exiting...")
-		*done <- true
 	}
 
-	go systray.Run(onReady, onExit)
+	systray.Run(onReady, onExit)
 }
 
 func onReady() {
 	// Sys tray icon
 	systray.SetTemplateIcon(icon.Data, icon.Data)
-	systray.SetTitle("Webview example")
+	systray.SetTitle("Awesome App")
+	systray.SetTooltip("Lantern")
 
 	// Menu items
 	mShowLantern := systray.AddMenuItem("Show Lantern", "")
 	mShowWikipedia := systray.AddMenuItem("Show Wikipedia", "")
 	mQuit := systray.AddMenuItem("Quit", "Quit the whole app")
+
+	// Sets the icon of a menu item. Only available on Mac.
+	mQuit.SetIcon(icon.Data)
 
 	registerClickHandlers := func() {
 		for {
