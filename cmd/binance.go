@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
 	"strconv"
@@ -42,7 +43,6 @@ func FetchSystemStatus() *SystemStatusResponse {
 
 	var systemStatus SystemStatusResponse
 	if err = json.Unmarshal(responseBody, &systemStatus); err != nil {
-		fmt.Println(string(responseBody))
 		panic(err)
 	}
 
@@ -62,7 +62,7 @@ type AccountData struct {
 
 type AccountSnapshot struct {
 	Type       string      `json:"type"`
-	UpdateTime time.Time   `JSON:"updateTime"`
+	UpdateTime int   `json:"updateTime"`
 	Data       AccountData `json:"data"`
 }
 
@@ -74,8 +74,10 @@ type AccountSnapshotResponse struct {
 
 func FetchAccountSnapshot() *AccountSnapshotResponse {
 	url := getBinanceEndpoint("account-snapshot")
-	params := "type=SPOT" // params: https://binance-docs.github.io/apidocs/spot/en/#daily-account-snapshot-user_data
+	params := fmt.Sprintf("type=SPOT&endTime=%d", time.Now().Unix() * 1000) // params: https://binance-docs.github.io/apidocs/spot/en/#daily-account-snapshot-user_data
 	req := makeSignedRequest(url, params)
+
+	log.Println("RequestURL: ", req.URL)
 
 	// Send the request
 	resp, err := client.Do(req)
@@ -89,11 +91,10 @@ func FetchAccountSnapshot() *AccountSnapshotResponse {
 		panic(err)
 	}
 
-	fmt.Println("ResposeBody", string(responseBody))
+	log.Println("ResposeBody", string(responseBody))
 
 	var accountSnapshot AccountSnapshotResponse
 	if err = json.Unmarshal(responseBody, &accountSnapshot); err != nil {
-		fmt.Println(string(responseBody))
 		panic(err)
 	}
 
@@ -120,6 +121,7 @@ func makeSignedRequest(url, params string) *http.Request {
 	}
 
 	req.Header.Set("X-MBX-APIKEY", apiKey)
+
 	return req
 }
 

@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/getlantern/systray"
 	"github.com/getlantern/systray/example/icon"
@@ -22,8 +23,7 @@ func onReady() {
 	systray.SetTooltip("Lantern")
 
 	// Menu items
-	mShowLantern := systray.AddMenuItem("Show Lantern", "")
-	mShowWikipedia := systray.AddMenuItem("Show Wikipedia", "")
+	mAccountSnapshot := systray.AddMenuItem("Account snapshot", "")
 	mQuit := systray.AddMenuItem("Quit", "Quit the whole app")
 
 	// Sets the icon of a menu item. Only available on Mac.
@@ -33,14 +33,24 @@ func onReady() {
 		for {
 			select {
 			// TODO: show window
-			case <-mShowLantern.ClickedCh:
-				fmt.Println("Lantern")
-			case <-mShowWikipedia.ClickedCh:
-				fmt.Println("Wiki")
+			case <-mAccountSnapshot.ClickedCh:
+				handleAccountSnapshot()
 			case <-mQuit.ClickedCh:
 				systray.Quit()
 			}
 		}
 	}
 	go registerClickHandlers()
+}
+
+func handleAccountSnapshot() {
+	res := FetchAccountSnapshot()
+	for _, dp := range(res.SnapshotVos) {
+		t := time.Unix(int64(dp.UpdateTime / 1000), 0)
+		fmt.Println(" -> ", t, dp.Data.TotalBtcAsset)
+
+		for _, currency := range(dp.Data.Balances) {
+			fmt.Printf("\t%s $%s\n", currency.Asset, currency.Free)
+		}
+	}
 }
