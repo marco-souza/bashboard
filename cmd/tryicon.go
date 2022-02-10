@@ -37,7 +37,7 @@ func onReady() {
 			case <-mAccountSnapshot.ClickedCh:
 				handleAccountSnapshot()
 			case <-mFetchAsset.ClickedCh:
-				handleFetchTicker(mFetchAsset)
+				go handleFetchTicker(mFetchAsset)
 			case <-mQuit.ClickedCh:
 				systray.Quit()
 			}
