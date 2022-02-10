@@ -24,6 +24,7 @@ func onReady() {
 
 	// Menu items
 	mAccountSnapshot := systray.AddMenuItem("Account snapshot", "")
+	mFetchAsset := systray.AddMenuItem("Fetch BTC-USD", "recurrent")
 	mQuit := systray.AddMenuItem("Quit", "Quit the whole app")
 
 	// Sets the icon of a menu item. Only available on Mac.
@@ -35,6 +36,8 @@ func onReady() {
 			// TODO: show window
 			case <-mAccountSnapshot.ClickedCh:
 				handleAccountSnapshot()
+			case <-mFetchAsset.ClickedCh:
+				handleFetchTicker(mFetchAsset)
 			case <-mQuit.ClickedCh:
 				systray.Quit()
 			}
@@ -42,14 +45,21 @@ func onReady() {
 	}
 	go registerClickHandlers()
 }
+func handleFetchTicker(item *systray.MenuItem) {
+	for {
+		time.Sleep(2 * time.Second)
+		tiker := FetchTicker("BTCUSDT")
+		item.SetTitle(tiker.Price)
+	}
+}
 
 func handleAccountSnapshot() {
 	res := FetchAccountSnapshot()
-	for _, dp := range(res.SnapshotVos) {
-		t := time.Unix(int64(dp.UpdateTime / 1000), 0)
+	for _, dp := range res.SnapshotVos {
+		t := time.Unix(int64(dp.UpdateTime/1000), 0)
 		fmt.Println(" -> ", t, dp.Data.TotalBtcAsset)
 
-		for _, currency := range(dp.Data.Balances) {
+		for _, currency := range dp.Data.Balances {
 			fmt.Printf("\t%s $%s\n", currency.Asset, currency.Free)
 		}
 	}

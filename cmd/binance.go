@@ -75,6 +75,29 @@ func FetchAccountSnapshot() *AccountSnapshotResponse {
 	return &accountSnapshot
 }
 
+type Ticker struct {
+	Symbol string `json:"symbol"`
+	Price  string `json:"price"`
+}
+
+func FetchTicker(currencyPair string) *Ticker {
+	// API ref: https://binance-docs.github.io/apidocs/spot/en/#symbol-price-ticker
+	url := getBinanceEndpoint("ticker")
+	params := "symbol=" + currencyPair
+	req := makeRequest(url, params)
+
+	responseBody := fetch(req)
+
+	var ticker Ticker
+	if err := json.Unmarshal(responseBody, &ticker); err != nil {
+		panic(err)
+	}
+
+	log.Println("Tiker", ticker)
+
+	return &ticker
+}
+
 func fetch(req *http.Request) []byte {
 	log.Println("RequestURL: ", req.URL)
 
@@ -98,6 +121,7 @@ func fetch(req *http.Request) []byte {
 var endpoint = map[string]string{
 	"account-snapshot": "/sapi/v1/accountSnapshot",
 	"system-status":    "/sapi/v1/system/status",
+	"ticker":           "/api/v3/ticker/price",
 }
 
 func getBinanceEndpoint(name string) string {
