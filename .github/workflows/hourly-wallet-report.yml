@@ -1,9 +1,9 @@
 name: Send Hourly wallet reports
 
 on:
+  workflow_dispatch: {}
   schedule:
-    # Should run at 8, 14, 17h (UTC-3)
-    - cron: "* * * * *"
+    - cron: "*/4 * * * *"
 
 jobs:
   refresh-feed:
