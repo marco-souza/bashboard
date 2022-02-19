@@ -17,3 +17,19 @@
 - [ ] Show a wallet overview chartA [0/2]
   + [ ] FE loading from API (maybe graphql)
   + [ ] BE create endpoints for getting data
+
+* Project Structure
+** configs
+- binance.go
+- telegram.go
+- mysql.go
+- ...
+** entities (model layer)
+*** binance/api.go
+*** telegram/api.go
+*** mysql/account.go
+*** mysql/transfer.go
+** services (data layer)
+*** repository.go
+** usecases (busines layer)
+** controlers (delivery layer)

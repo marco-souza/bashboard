@@ -1,0 +1,12 @@
+@startuml Get Heritage Evolution report binance
+
+Scheduler -> NotifyWalletInfo : 1. fetch wallet total amount in USD
+
+NotifyWalletInfo -> BinanceAPI : 2. fetch total wallet amount + btc ticker
+NotifyWalletInfo <- BinanceAPI
+
+NotifyWalletInfo -> TelegramAPI : 3. get latest message value
+NotifyWalletInfo <- TelegramAPI
+
+NotifyWalletInfo -> TelegramAPI : 4. send total amount + heritage evolution for the regirsted user
+@enduml
