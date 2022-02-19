@@ -3,7 +3,7 @@ name: Send Hourly wallet reports
 on:
   schedule:
     # Should run at 8, 14, 17h (UTC-3)
-    - cron: "*/4 * * * *"
+    - cron: "* * * * *"
 
 jobs:
   refresh-feed:
