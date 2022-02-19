@@ -1,4 +1,4 @@
-package cmd
+package desktop
 
 import (
 	"fmt"
@@ -6,6 +6,7 @@ import (
 
 	"github.com/getlantern/systray"
 	"github.com/getlantern/systray/example/icon"
+	"github.com/marco-souza/binance-dashboard/cmd"
 )
 
 func StartApp() {
@@ -48,13 +49,13 @@ func onReady() {
 func handleFetchTicker(item *systray.MenuItem) {
 	for {
 		time.Sleep(2 * time.Second)
-		tiker := FetchTicker("BTCUSDT")
+		tiker := cmd.FetchTicker("BTCUSDT")
 		item.SetTitle(tiker.Price)
 	}
 }
 
 func handleAccountSnapshot() {
-	res := FetchAccountSnapshot()
+	res := cmd.FetchAccountSnapshot()
 	for _, dp := range res.SnapshotVos {
 		t := time.Unix(int64(dp.UpdateTime/1000), 0)
 		fmt.Println(" -> ", t, dp.Data.TotalBtcAsset)

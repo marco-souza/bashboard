@@ -1,4 +1,4 @@
-module marco-souza/binance-dashboard
+module github.com/marco-souza/binance-dashboard
 
 go 1.17
 
