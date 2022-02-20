@@ -3,8 +3,8 @@ name: Send Hourly wallet reports
 on:
   workflow_dispatch: {}
   schedule:
-    # runs at every 15th minute
-    - cron: "*/15 * * * *"
+    # runs at every hour
+    - cron: "0 * * * *"
 
 jobs:
   refresh-feed:
@@ -23,7 +23,7 @@ jobs:
         run: go mod tidy
 
       - name: Send report
-        run: go run main.go
+        run: go run main.go report
         env:
           BINANCE_API_KEY: ${{ secrets.BINANCE_API_KEY }}
           BINANCE_API_SECRET: ${{ secrets.BINANCE_API_SECRET }}

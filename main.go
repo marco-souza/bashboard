@@ -1,7 +1,7 @@
 package main
 
-import "github.com/marco-souza/binance-dashboard/cmd"
+import "github.com/marco-souza/bashbot/cmd"
 
 func main() {
-	cmd.SendWalletReport()
+	cmd.CommandHandler()
 }
