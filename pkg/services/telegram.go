@@ -21,7 +21,7 @@ func SendChatMessage(chatID int, message string) {
 	params.Add("parse_mode", "Markdown")
 	params.Add("text", message)
 
-	req := MakeRequest(telegramURL, params.Encode())
+	req := MakeRequest(telegramURL, params)
 	body := Fetch(req)
 
 	fmt.Println(string(body))

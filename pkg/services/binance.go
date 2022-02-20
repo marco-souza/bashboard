@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"net/url"
 	"strconv"
 	"time"
 
@@ -15,26 +16,14 @@ import (
 	"github.com/marco-souza/bashbot/pkg/entities"
 )
 
-func FetchSystemStatus() *entities.SystemStatusResponse {
-	url := getBinanceEndpoint("system-status")
-	req := MakeRequest(url, "")
+func FetchAccountSnapshot(walletType string) *entities.AccountSnapshotResponse {
+	accountSnapURL := getBinanceEndpoint("account-snapshot")
 
-	// Send the request
-	responseBody := Fetch(req)
+	params := url.Values{}
+	params.Add("type", walletType)
+	params.Add("endTime", fmt.Sprint(time.Now().Unix() * 1000))
 
-	var systemStatus entities.SystemStatusResponse
-	if err := json.Unmarshal(responseBody, &systemStatus); err != nil {
-		panic(err)
-	}
-
-	return &systemStatus
-}
-
-func FetchAccountSnapshot() *entities.AccountSnapshotResponse {
-	url := getBinanceEndpoint("account-snapshot")
-	params := fmt.Sprintf("type=SPOT&endTime=%d", time.Now().Unix()*1000) // params: https://binance-docs.github.io/apidocs/spot/en/#daily-account-snapshot-user_data
-	req := makeSignedRequest(url, params)
-
+	req := makeSignedRequest(accountSnapURL, params)
 	responseBody := Fetch(req)
 
 	var accountSnapshot entities.AccountSnapshotResponse
@@ -47,10 +36,12 @@ func FetchAccountSnapshot() *entities.AccountSnapshotResponse {
 
 func FetchTicker(currencyPair string) *entities.Ticker {
 	// API ref: https://binance-docs.github.io/apidocs/spot/en/#symbol-price-ticker
-	url := getBinanceEndpoint("ticker")
-	params := "symbol=" + currencyPair
-	req := MakeRequest(url, params)
+	tickerURL := getBinanceEndpoint("ticker")
 
+	params := url.Values{}
+	params.Add("symbol", currencyPair)
+
+	req := MakeRequest(tickerURL, params)
 	responseBody := Fetch(req)
 
 	var ticker entities.Ticker
@@ -62,7 +53,6 @@ func FetchTicker(currencyPair string) *entities.Ticker {
 
 	return &ticker
 }
-
 
 var endpoint = map[string]string{
 	"account-snapshot": "/sapi/v1/accountSnapshot",
@@ -78,24 +68,23 @@ func getBinanceEndpoint(name string) string {
 	return config.BASE_BINANCE_URL + url
 }
 
-func makeSignedRequest(url, params string) *http.Request {
-	// TODO handle query params properly
-	req := MakeRequest(signUrl(url, params), "")
+func makeSignedRequest(url string, params url.Values) *http.Request {
+	signedParams := signParams(params)
+	req := MakeRequest(url, signedParams)
+
 	req.Header.Set("X-MBX-APIKEY", config.BINANCE_API_KEY)
+
 	return req
 }
 
-func signUrl(url string, params string) string {
-	if params != "" {
-		params += "&"
-	}
+func signParams(params url.Values) url.Values {
 	timestamp := strconv.FormatInt(time.Now().UnixMilli(), 10)
-	params += "timestamp=" + timestamp
+	params.Add("timestamp", timestamp)
 
-	signature := sign(params)
-	signedUrl := fmt.Sprintf("%s?%s&signature=%s", url, params, signature)
+	signature := sign(params.Encode())
+	params.Add("signature", signature)
 
-	return signedUrl
+	return params
 }
 
 func sign(text string) string {

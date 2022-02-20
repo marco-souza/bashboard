@@ -1,10 +1,5 @@
 package entities
 
-type SystemStatusResponse struct {
-	Status int    `json:"status"`
-	Msg    string `json:"msg"`
-}
-
 type AccountAssets struct {
 	Asset  string `json:"asset"`
 	Free   string `json:"free"`

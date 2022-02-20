@@ -8,7 +8,7 @@ import (
 )
 
 func SendWalletReport() {
-	resp := services.FetchAccountSnapshot()
+	resp := services.FetchAccountSnapshot("SPOT")
 	snap := resp.SnapshotVos[len(resp.SnapshotVos)-1]
 
 	totalBtcAmount, err := strconv.ParseFloat(snap.Data.TotalBtcAsset, 32)

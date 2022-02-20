@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"net/url"
 )
 
 func Fetch(req *http.Request) []byte {
@@ -26,10 +27,9 @@ func Fetch(req *http.Request) []byte {
 	return responseBody
 }
 
-func MakeRequest(url, params string) *http.Request {
-	if params != "" {
-		url += "?" + params
-	}
+func MakeRequest(url string, params url.Values) *http.Request {
+	url += "?" + params.Encode()
+
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		panic(err)
