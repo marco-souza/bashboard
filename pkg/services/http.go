@@ -28,7 +28,9 @@ func Fetch(req *http.Request) []byte {
 }
 
 func MakeRequest(url string, params url.Values) *http.Request {
-	url += "?" + params.Encode()
+	if (params != nil) {
+		url += "?" + params.Encode()
+	}
 
 	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {

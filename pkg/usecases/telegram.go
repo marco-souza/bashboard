@@ -26,7 +26,7 @@ func SendWalletReport() {
 	totalUSDAmount := totalBtcAmount * tikerPrice
 
 	// TODO: Fetch exchange ticker USD-BRL
-	tickerBRLPrice := 5.0
+	tickerBRLPrice := services.FetchDolarRealExchangeValue()
 	totalBRLAmount := totalUSDAmount * tickerBRLPrice
 
 	msg := fmt.Sprintf("*Binance Wallet Report*\n\n - USD: $ %.2f\n - BRL: R$ %.2f", totalUSDAmount, totalBRLAmount)
